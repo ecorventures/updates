@@ -76,6 +76,23 @@ header {
   justify-content: center;
 }
 
+.report nav {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.report nav > * {
+  display: flex;
+  flex: 1 1 auto;
+}
+
+.report nav span {
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 .1vw;
+}
+
 .report .content {
   display: flex;
   flex: 1 1 auto;
@@ -89,6 +106,19 @@ header {
   height: 100%;
   margin: .45em;
   padding: 5vh;
+}
+
+.report .refresh_button {
+  background-color: #3c7bb9;
+  color: #ffffff;
+  border-radius: 3px;
+  padding: .45em .89em;
+  text-decoration: none;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: .4;
 }
 
 .content table {

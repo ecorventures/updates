@@ -5,7 +5,9 @@ const report = new NGNX.VIEW.Registry({
 
   references: {
     serverLabel: '#update_server',
-    rows: 'table tbody'
+    table: 'table',
+    rows: 'table tbody',
+    refreshButton: '.refresh_button'
   },
 
   templates: {
@@ -42,6 +44,33 @@ const report = new NGNX.VIEW.Registry({
           'afterbegin'
         )
       })
+    })
+
+    this.ref.refreshButton.on('click', () => {
+      this.ref.refreshButton.element.classList.add('disabled')
+      this.ref.table.element.classList.add('disabled')
+
+      ReleaseHistory.once('clear', () => {
+        NGN.NET.put({
+          url: `${this.parent.properties.url}/manifest/release`,
+          username: this.parent.properties.user,
+          password: this.parent.properties.pass
+        }, (res) => {
+          if (res.status !== 200) {
+            console.log(res.status, res.responseText)
+          } else {
+            NGN.slice(this.ref.rows.element.children).forEach(child => NGN.DOM.destroy(child))
+
+            ReleaseHistory.once('load', () => {
+              this.ref.refreshButton.element.classList.remove('disabled')
+              this.ref.table.element.classList.remove('disabled')
+            })
+            ReleaseHistory.load(JSON.parse(res.responseText))
+          }
+        })
+      })
+
+      ReleaseHistory.clear()
     })
   }
 })
